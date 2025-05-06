@@ -29,7 +29,7 @@ app.get("/api/products", async (req, res) => {
 app.listen(5000, () => console.log("Server running on port 5000"));
 
 // backend/models/Product.js
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 
 const ProductSchema = new mongoose.Schema({
   name: { type: String, required: true },
