@@ -2,6 +2,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const Stripe = require("stripe");
 require("dotenv").config();
 
 const Product = require("./models/Product");
