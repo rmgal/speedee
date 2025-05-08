@@ -26,27 +26,11 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
-app.listen(5000, () => console.log("Server running on port 5000"));
-
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
-const Stripe = require("stripe");
-require("dotenv").config();
-
-const Product = require("./models/Product");
+// app.listen(5000, () => console.log("Server running on port 5000"));
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-app.use(cors());
-app.use(express.json());
-
-mongoose.connect(process.env.MONGO_URI).then(() => console.log("MongoDB Connected"));
-
-app.get("/api/products", async (req, res) => {
-  const products = await Product.find();
-  res.json(products);
-});
+// mongoose.connect(process.env.MONGO_URI).then(() => console.log("MongoDB Connected"));
 
 // NEW: Stripe Checkout session route
 app.post("/api/checkout/create-checkout-session", async (req, res) => {
