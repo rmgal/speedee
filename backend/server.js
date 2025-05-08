@@ -36,7 +36,6 @@ require("dotenv").config();
 
 const Product = require("./models/Product");
 
-const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 app.use(cors());
