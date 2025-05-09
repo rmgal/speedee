@@ -63,5 +63,8 @@ app.post("/api/checkout/create-checkout-session", async (req, res) => {
   }
 });
 
+const checkoutRoutes = require("./routes/checkout");
+app.use("/api/checkout", checkoutRoutes);
+
 app.listen(5000, () => console.log("Server running on port 5000"));
 
