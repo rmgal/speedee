@@ -27,12 +27,17 @@ app.listen(5000, () => console.log("Server running on port 5000"));
 
 mongoose.connect(process.env.MONGO_URI).then(() => console.log("MongoDB Connected"));
 
+// Raw body parser for Stripe webhook
+app.use("/api/stripe/webhook", express.raw({ type: "application/json" }));
+
 app.use(cors());
 app.use(express.json());
 
 const checkoutRoutes = require("./routes/checkout");
 app.use("/api/stripe", require("./routes/webhook"));
 app.use("/api/checkout", checkoutRoutes);
+
+
 
 
 
