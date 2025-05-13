@@ -7,6 +7,12 @@ require("dotenv").config();
 const Product = require("./models/Product");
 const app = express();
 
+app.use(cors({
+  origin: "https://speedee-fe.vercel.app", 
+  methods: ["GET", "POST"],
+  credentials: true
+}));
+
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -25,16 +31,9 @@ app.get("/api/products", async (req, res) => {
 
 app.listen(5000, () => console.log("Server running on port 5000"));
 
-mongoose.connect(process.env.MONGO_URI).then(() => console.log("MongoDB Connected"));
-
 // Raw body parser for Stripe webhook
 app.use("/api/stripe/webhook", express.raw({ type: "application/json" }));
 
-app.use(cors({
-  origin: "https://speedee-fe.vercel.app", 
-  methods: ["GET", "POST"],
-  credentials: true
-}));
 app.use(express.json());
 
 const checkoutRoutes = require("./routes/checkout");
