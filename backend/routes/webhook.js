@@ -16,27 +16,43 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
   }
 
   if (event.type === "checkout.session.completed") {
-    const session = event.data.object;
+    
+    try {
+      const session = event.data.object;
 
-    // Optional: fetch line items if needed
-    const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
+      // Optional: fetch line items if needed
+      const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
 
-    const order = new Order({
-      email: session.customer_email,
-      items: lineItems.data.map((item) => ({
-        name: item.description,
-        price: item.amount_total / 100,
-        quantity: item.quantity,
-      })),
-      totalAmount: session.amount_total / 100,
-      paymentStatus: session.payment_status,
-      shipping: {
-        name: session.shipping.name,
-        address: session.shipping.address,
-      },
-    });
+      ///--
+      console.log("Checkout Session:", session);
+      console.log("Line Items:", lineItems);
 
-    await order.save();
+      if (!lineItems || !lineItems.data) {
+        console.warn("No line items returned from Stripe");
+        return res.status(400).send("No line items");
+      }
+
+      const order = new Order({
+        email: session.customer_email,
+        items: lineItems.data.map((item) => ({
+          name: item.description,
+          price: item.amount_total / 100,
+          quantity: item.quantity,
+        })),
+        totalAmount: session.amount_total / 100,
+        paymentStatus: session.payment_status,
+        shipping: {
+          name: session.shipping.name,
+          address: session.shipping.address,
+        },
+      });
+
+      await order.save();
+    }
+    catch (err) {
+      console.error("Error handling checkout.session.completed:", err);
+      return res.status(500).send("Webhook handler error");
+    }
   }
 
   res.json({ received: true });
