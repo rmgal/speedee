@@ -42,9 +42,9 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
         totalAmount: session.amount_total / 100,
         paymentStatus: session.payment_status,
         shipping: {
-          name: session.shipping.name,
-          address: session.shipping.address,
-        },
+          name: session.shipping?.name || "",
+          address: session.shipping?.address || {},
+        }
       });
 
       await order.save();

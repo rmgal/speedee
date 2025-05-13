@@ -27,6 +27,19 @@ router.post("/create-checkout-session", async (req, res) => {
     shipping_address_collection: {
       allowed_countries: ["US", "CA"], // adjust as needed
     },
+    shipping_options: [
+      {
+        shipping_rate_data: {
+          type: "fixed_amount",
+          fixed_amount: { amount: 500, currency: "usd" },
+          display_name: "Standard Shipping",
+          delivery_estimate: {
+            minimum: { unit: "business_day", value: 3 },
+            maximum: { unit: "business_day", value: 5 },
+          },
+        },
+      },
+    ],
   });
 
   res.json({ url: session.url });
