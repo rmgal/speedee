@@ -36,6 +36,8 @@ app.use(express.json());
 const checkoutRoutes = require("./routes/checkout");
 app.use("/api/stripe", require("./routes/webhook"));
 app.use("/api/checkout", checkoutRoutes);
+app.use("/api/orders", require("./routes/orders"));
+
 
 
 

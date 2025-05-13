@@ -20,10 +20,13 @@ router.post("/create-checkout-session", async (req, res) => {
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
-    line_items,
+    line_items: lineItems,
     mode: "payment",
     success_url: "http://localhost:5173/success",
     cancel_url: "http://localhost:5173/cancel",
+    shipping_address_collection: {
+      allowed_countries: ["US", "CA"], // adjust as needed
+    },
   });
 
   res.json({ url: session.url });
