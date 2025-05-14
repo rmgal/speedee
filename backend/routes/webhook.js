@@ -34,7 +34,7 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
         email: session.customer_details.customer_email,
         items: lineItems.data.map((item) => ({
           name: item.description,
-          price: item.amount_total / 100,
+          price: item.amount_total / item.quantity / 100,
           quantity: item.quantity,
         })),
         totalAmount: session.amount_total / 100,

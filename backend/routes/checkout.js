@@ -15,7 +15,7 @@ router.post("/create-checkout-session", async (req, res) => {
       },
       unit_amount: Math.round(item.price * 100), // in cents
     },
-    quantity: 1,
+    quantity: item.quantity || 1,
   }));
 
   const session = await stripe.checkout.sessions.create({
