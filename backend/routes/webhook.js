@@ -21,10 +21,6 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
       const session = event.data.object;
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
 
-      ///--
-      console.log("Checkout Session:", session);
-      console.log("Line Items:", lineItems);
-
       if (!lineItems || !lineItems.data) {
         console.warn("No line items returned from Stripe");
         return res.status(400).send("No line items");
