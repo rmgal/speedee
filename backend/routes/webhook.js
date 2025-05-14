@@ -31,7 +31,7 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
       }
 
       const order = new Order({
-        email: session.customer_email,
+        email: session.customer_details.customer_email,
         items: lineItems.data.map((item) => ({
           name: item.description,
           price: item.amount_total / 100,
@@ -39,16 +39,16 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
         })),
         totalAmount: session.amount_total / 100,
         paymentStatus: session.payment_status,
-        shipping: session.shipping
+        shipping: session.collected_information.shipping_details
           ? {
-              name: session.shipping.name || "",
+              name: session.collected_information.shipping_details.name || "",
               address: {
-                line1: session.shipping.address.line1 || "",
-                line2: session.shipping.address.line2 || "",
-                city: session.shipping.address.city || "",
-                state: session.shipping.address.state || "",
-                postal_code: session.shipping.address.postal_code || "",
-                country: session.shipping.address.country || ""
+                line1: session.collected_information.shipping_details.address.line1 || "",
+                line2: session.collected_information.shipping_details.address.line2 || "",
+                city: session.collected_information.shipping_details.address.city || "",
+                state: session.collected_information.shipping_details.address.state || "",
+                postal_code: session.collected_information.shipping_details.address.postal_code || "",
+                country: session.collected_information.shipping_details.address.country || ""
               }
             }
           : { name: "", address: {} }
