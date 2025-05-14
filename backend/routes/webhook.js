@@ -19,8 +19,6 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
     
     try {
       const session = event.data.object;
-
-      // Optional: fetch line items if needed
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
 
       ///--
@@ -41,10 +39,19 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
         })),
         totalAmount: session.amount_total / 100,
         paymentStatus: session.payment_status,
-        shipping: {
-          name: session.shipping?.name || "",
-          address: session.shipping?.address || {},
-        }
+        shipping: session.shipping
+          ? {
+              name: session.shipping.name || "",
+              address: {
+                line1: session.shipping.address.line1 || "",
+                line2: session.shipping.address.line2 || "",
+                city: session.shipping.address.city || "",
+                state: session.shipping.address.state || "",
+                postal_code: session.shipping.address.postal_code || "",
+                country: session.shipping.address.country || ""
+              }
+            }
+          : { name: "", address: {} }
       });
 
       await order.save();
