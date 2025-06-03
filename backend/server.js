@@ -8,7 +8,7 @@ const Product = require("./models/Product");
 const app = express();
 
 app.use(cors({
-  origin: ["https://speedee-fe.vercel.app", "https://music.speedeeinc.com/"], 
+  origin: ["https://speedee-fe.vercel.app", "https://music.speedeeinc.com"], 
   methods: ["GET", "POST"],
   credentials: true
 }));
